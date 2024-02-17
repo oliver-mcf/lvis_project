@@ -28,3 +28,12 @@ if __name__ == '__main__':
     # Plot waveform from subset
     waveform = LVIS_subset.one_waveform(0)
     LVIS_subset.plot_wave(waveform[1], waveform[0], outName = 'waveform.png')
+
+    # Locate waveform
+    print(f'Waveform: {LVIS_subset.x[0], LVIS_subset.y[0]}, EPSG:3031')
+
+    # Save subset coordinates
+    df = pd.DataFrame({'x': LVIS_subset.x, 'y': LVIS_subset.y})
+    df.to_csv('lvis_subset.csv', index = False)
+    print(df.head())
+
