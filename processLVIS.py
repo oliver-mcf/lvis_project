@@ -6,9 +6,10 @@ Class to Process LVIS Data
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter1d
 from tqdm import tqdm
-from readLVIS import readLVIS           # inherit class
+from readLVIS import readLVIS
 
 
+# Define class
 class processLVIS(readLVIS):
   '''Class to process LVIS ground elevation over ice'''
 

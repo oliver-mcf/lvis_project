@@ -10,6 +10,7 @@ from pprint import pprint
 import pandas as pd
 
 
+# Define class
 class readLVIS():
   '''Class to retrieve data from LVIS file'''
 
