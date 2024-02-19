@@ -42,4 +42,5 @@ if __name__ == '__main__':
                 LVIS_subset.reproject_coords(3031)
                 outName = f'/home/s1949330/Documents/MSc_OOSA/project_data/2009/DEM_subset.x.{x0}.y.{y0}.tif'
                 LVIS_subset.write_tiff(LVIS_subset.zG, LVIS_subset.x, LVIS_subset.y, 30, filename = outName, epsg = 3031)
-        print('-----------------LVIS FILE DEM COMPLETE-----------------:')
+        
+        print(f'-----------------LVIS FILE DEM COMPLETE-----------------\n')

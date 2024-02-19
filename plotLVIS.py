@@ -82,7 +82,7 @@ class plotLVIS(processLVIS):
       transform = from_origin(minX, maxY, res, res)
 
         # Write data to GeoTIFF using rasterio
-      with rio.open(filename, 'w', driver = 'GTiff', height = nY, width = nX, count = 1, dtype = imageArr.dtype, crs = f'EPSG:{epsg}', transform = transform) as dst:
+      with rio.open(filename, 'w', driver = 'GTiff', height = nY, width = nX, count = 1, dtype = imageArr.dtype, crs = f'EPSG:{epsg}', transform = transform, nodata = -999) as dst:
             dst.write(imageArr, 1)
       print("Success:", filename)
 
