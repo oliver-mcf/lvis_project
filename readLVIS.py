@@ -19,7 +19,6 @@ class readLVIS():
   def __init__(self, filename, setElev = False, minX = -100000000, maxX = 100000000, minY = -1000000000, maxY = 100000000, onlyBounds = False):
     '''Class initialiser: Read spatial subset of LVIS data'''
     self.read_LVIS(filename, minX, minY, maxX, maxY, onlyBounds)
-    print("Successful readLVIS:", filename)
     if(setElev):            # to save time, only read elevation if wanted
       self.set_elevations()
 

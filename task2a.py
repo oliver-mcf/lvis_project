@@ -1,5 +1,5 @@
 '''
-Task2a: Batch Process LVIS, Produce DEMs
+Task2a: Batch Process LVIS, Produce DEMs, 2009
 '''
 
 # Import objects and methods
@@ -21,7 +21,7 @@ if __name__ == '__main__':
         # Initialize class
         LVIS = plotLVIS(lvis_file, onlyBounds = True)
     
-        # Define subset size (RAM < 1.5 GB)
+        # Define subset size, RAM < 2 GB
         subset_size = (LVIS.bounds[2] - LVIS.bounds[0]) / 16
         for x0 in np.arange(LVIS.bounds[0], LVIS.bounds[2], subset_size):
             x1 = x0 + subset_size

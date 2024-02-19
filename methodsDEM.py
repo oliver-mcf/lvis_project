@@ -15,9 +15,7 @@ from rasterio.mask import mask
 from shapely.geometry import mapping
 import geopandas as gpd
 from shapely.geometry import shape, box
-
 import subprocess
-from plotLVIS import plotLVIS
 
 
 
@@ -43,9 +41,9 @@ def filter_subsets(dem_list, shapefile):
     print(f'Subsets in range of glacier: {len(filtered_list)}')
     return filtered_list
 
+###########################################
 
-
-def merge_subsets(filtered_list, output_dir, step_size):
+def batch_merge_subsets(filtered_list, output_dir, step_size):
     '''Batch process to merge DEM subsets'''
     # systematically iterate through subsets
     merged_count = 0
@@ -60,55 +58,32 @@ def merge_subsets(filtered_list, output_dir, step_size):
         # close virtual dataset
         vrt = None
         merged_count += 1
-    print(f'Successfully merged {len(filtered_list)} into {merged_count} subsets')
+    print(f'Successful merge from {len(filtered_list)} to {merged_count} subsets')
 
-    # merge the chunked GeoTIFFs into a final result if needed
-    #final_vrt = gdal.BuildVRT(os.path.join(output_dir, 'merged.vrt'),
-    #                          [f'merged_chunk_{i}.tif' for i in range(0, len(filtered_list), step_size)])
-    #gdal.Translate(os.path.join(output_dir, 'mergedDEM.tif'), final_vrt, xRes=30, yRes=-30)
+
+    # merge the newly merged subsets in range of glacier
+    #output = 'PIG_DEM.tif'
+    #final_vrt = gdal.BuildVRT(os.path.join(output_dir, 'PIG_DEM.vrt'), [f'merged_dem{i}.tif' for i in range(0, len(filtered_list), step_size)])
+    #gdal.Translate(os.path.join(output_dir, output), final_vrt, xRes = 30, yRes = -30)
     #final_vrt = None
+    #print(f'SUCCESSFUL PINE ISLAND GLACIER DEM: {output_dir}{output}')
 
+def merge_geotiffs(input_files, output_file):
+    """
+    Merge multiple GeoTIFFs into a single GeoTIFF file.
 
+    Parameters:
+    - input_files: List of input GeoTIFF file paths to be merged.
+    - output_file: Output GeoTIFF file path.
 
+    Returns:
+    - None
+    """
+    # Open the first GeoTIFF to use its geospatial information
+    with gdal.Open(input_files[0]) as src_ds:
+        # Create an output GeoTIFF with the same geospatial information
+        gdal.Warp(output_file, src_ds, options=['COMPRESS=DEFLATE'])
 
-
-
-
-
-
-
-###########################################
-
-def combine_dems(input_list, output_file, shape):
-    # Retrieve wanted DEM data from subsets and combine
-    # read geometry of shapefile
-    gdf = gpd.read_file(shape)
-    mask_geometry = gdf.geometry
-    # find bounds of largest subset
-    max_height, max_width = 0, 0
-    for file in input_list:
-        with rio.open(file) as src:
-            height, width = src.shape
-            max_height = max(max_height, height)
-            max_width = max(max_width, width)
-    # allocate space to store masked data from each subset
-    combined_data = np.full((len(input_list), max_height, max_width), -999.0, dtype = float)
-    # systematically read each subset
-    for idx, filename in enumerate(input_list):
-        with rio.open(filename) as src:
-            data = src.read(1, masked=True)
-            transform = src.transform
-            crs = src.crs
-            # set boolean (True/False) mask of pine island
-            mask = features.geometry_mask(mask_geometry, transform = transform, out_shape = data.shape, invert = True)
-            # apply mask subset and add to allocated space
-            combined_data[idx, :data.shape[0], :data.shape[1]] = np.ma.masked_array(data, mask)
-    # write the combined masked data to tiff
-    print('Writing masked DEM to tiff...')
-    with rio.open(output_file, 'w', driver = 'GTiff', height = max_height, width = max_width, 
-                  count = len(input_list), dtype = combined_data.dtype, crs = crs, transform = transform, nodata = -999.0) as dst:
-        dst.write(combined_data)
-
-    print('SUCCESSFUL PINE ISLAND GLACIER DEM: ', output_file)
-
-###########################################
+        # Loop through the remaining GeoTIFFs and add them to the output
+        for input_file in input_files[1:]:
+            gdal.Warp(output_file, input_file, options=['COMPRESS=DEFLATE'], destSRS=src_ds.GetProjection())
