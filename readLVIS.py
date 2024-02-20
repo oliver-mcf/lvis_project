@@ -8,6 +8,8 @@ import h5py as h5
 from pyproj import Proj, transform
 from pprint import pprint
 import pandas as pd
+import time
+import psutil
 
 
 # Define class

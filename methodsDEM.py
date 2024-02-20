@@ -8,6 +8,7 @@ from osgeo import gdal
 import numpy as np
 import os
 import rasterio as rio
+from rasterio.plot import show
 from rasterio import features
 from rasterio.merge import merge
 from rasterio.enums import Resampling
@@ -15,9 +16,28 @@ from rasterio.mask import mask
 from shapely.geometry import mapping
 import geopandas as gpd
 from shapely.geometry import shape, box
+import matplotlib.pyplot as plt
 import subprocess
 
 
+# List of functions
+
+def convert_bytes(number):
+    '''Function to convert file size to known units'''
+    for x in ['bytes', 'KB', 'MB', 'GB']:
+        if number < 1024.0:
+            return "%3.1f %s" % (number, x)
+        number /= 1024.0
+    return
+
+###########################################
+
+def file_size(file):
+    '''Function to calculate filesize of file'''
+    if os.path.isfile(file):
+        file_info = os.stat(file)
+        return convert_bytes(file_info.st_size)
+    return
 
 ###########################################
 
@@ -38,12 +58,12 @@ def filter_subsets(dem_list, shapefile):
         # add to filtered list if data intersects with box
         if dem_geom.intersects(shapefile_geom):
             filtered_list.append(dem_file)
-    print(f'Subsets in range of glacier: {len(filtered_list)}')
+    print(f'DEM subsets in range of glacier: {len(filtered_list)}')
     return filtered_list
 
 ###########################################
 
-def batch_merge_subsets(filtered_list, output_dir, step_size):
+def merge_subsets(filtered_list, output_dir, step_size):
     '''Batch process to merge DEM subsets'''
     # systematically iterate through subsets
     merged_count = 0
@@ -58,32 +78,27 @@ def batch_merge_subsets(filtered_list, output_dir, step_size):
         # close virtual dataset
         vrt = None
         merged_count += 1
-    print(f'Successful merge from {len(filtered_list)} to {merged_count} subsets')
+    print(f'Successful merge from {len(filtered_list)} to {merged_count} DEM subsets')
 
+###########################################
 
-    # merge the newly merged subsets in range of glacier
-    #output = 'PIG_DEM.tif'
-    #final_vrt = gdal.BuildVRT(os.path.join(output_dir, 'PIG_DEM.vrt'), [f'merged_dem{i}.tif' for i in range(0, len(filtered_list), step_size)])
-    #gdal.Translate(os.path.join(output_dir, output), final_vrt, xRes = 30, yRes = -30)
-    #final_vrt = None
-    #print(f'SUCCESSFUL PINE ISLAND GLACIER DEM: {output_dir}{output}')
+def clip_geotiff(input_file, shape_file, output_file):
+    '''Clip DEM geotiff to study area'''
+    # read input raster and shapefile
+    glacier = gpd.read_file(shape_file)
+    dem = rio.open(input_file)
+    # align raster and shape geometry
+    glacier = glacier.to_crs(dem.crs)
+    geometry = glacier.geometry.values[0]
+    geoms = [geometry]
+    # clip dem to shapefile
+    dem_glacier, transform = mask(dataset = dem, shapes = geoms, crop = True)
+    metadata = dem.meta.copy()
+    metadata.update({'driver': 'GTiff', 'height': dem_glacier.shape[1], 'width': dem_glacier.shape[2], 'transform': transform})
+    # write the clipped DEM as geotiff
+    with rio.open(output_file, 'w', **metadata) as dst:
+        dst.write(dem_glacier)
+    dem.close()
+    print(f'------------SUCCESSFUL LVIS DEM OF PINE ISLAND GLACIER------------:\n {output_file}')
 
-def merge_geotiffs(input_files, output_file):
-    """
-    Merge multiple GeoTIFFs into a single GeoTIFF file.
-
-    Parameters:
-    - input_files: List of input GeoTIFF file paths to be merged.
-    - output_file: Output GeoTIFF file path.
-
-    Returns:
-    - None
-    """
-    # Open the first GeoTIFF to use its geospatial information
-    with gdal.Open(input_files[0]) as src_ds:
-        # Create an output GeoTIFF with the same geospatial information
-        gdal.Warp(output_file, src_ds, options=['COMPRESS=DEFLATE'])
-
-        # Loop through the remaining GeoTIFFs and add them to the output
-        for input_file in input_files[1:]:
-            gdal.Warp(output_file, input_file, options=['COMPRESS=DEFLATE'], destSRS=src_ds.GetProjection())
+###########################################

@@ -6,6 +6,7 @@ Class to Process LVIS Data
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter1d
 from tqdm import tqdm
+import argparse
 from readLVIS import readLVIS
 
 

@@ -14,7 +14,7 @@ from rasterio.transform import from_origin
 from rasterio.enums import Resampling
 from rasterio.merge import merge
 from rasterio.mask import mask
-from shapely.geometry import mapping
+from shapely.geometry import mapping, Point
 import geopandas as gpd
 from processLVIS import processLVIS
 
@@ -22,7 +22,7 @@ from processLVIS import processLVIS
 # Define class
 class plotLVIS(processLVIS):
   '''Class to visualise LVIS data'''
-  
+
   ###########################################
 
   def reproject_coords(self, outEPSG):
