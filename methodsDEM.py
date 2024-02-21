@@ -4,7 +4,7 @@ Methods for LVIS DEMs
 
 # Import libraries
 import glob
-from osgeo import gdal
+from osgeo import gdal, gdal_array
 import numpy as np
 import os
 import rasterio as rio
@@ -12,11 +12,19 @@ from rasterio.plot import show
 from rasterio import features
 from rasterio.merge import merge
 from rasterio.enums import Resampling
+from rasterio.transform import from_origin
 from rasterio.mask import mask
+from rasterio.fill import fillnodata
+from rasterio.features import geometry_mask
+from rasterio.windows import from_bounds, Window
+
 from shapely.geometry import mapping
 import geopandas as gpd
 from shapely.geometry import shape, box
 import matplotlib.pyplot as plt
+from scipy import ndimage
+from scipy.interpolate import griddata
+from scipy.spatial.kdtree import KDTree
 import subprocess
 
 
@@ -102,3 +110,23 @@ def clip_geotiff(input_file, shape_file, output_file):
     print(f'------------SUCCESSFUL LVIS DEM OF PINE ISLAND GLACIER------------:\n {output_file}')
 
 ###########################################
+
+def smooth_geotiff(input_file, output_file, window_size):
+    # read input raster data
+    with rio.open(input_file) as src:
+        data = src.read(1)
+        # identify coords of nodata values
+        nodata_mask = data == src.nodata
+        y, x = np.where(~nodata_mask)
+        values = data[~nodata_mask]
+        values[values < 0] = 0
+        # create grid for interpolation
+        y_grid, x_grid = np.mgrid[0:data.shape[0]:window_size, 0:data.shape[1]:window_size]
+        # interpolate nodata values
+        filled_data = griddata((y, x), values, (y_grid, x_grid), method = 'linear')
+        # create geotiff with filled data
+        with rio.open(output_file, 'w', **src.profile) as dst:
+            dst.write(filled_data, 1)
+
+###########################################
+
