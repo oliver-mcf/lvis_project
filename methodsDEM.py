@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import subprocess
 
 
-# List of functions
+###########################################
 
 def convert_bytes(number):
     '''Function to convert file size to known units'''

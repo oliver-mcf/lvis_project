@@ -9,35 +9,51 @@ from plotLVIS import *
 from methodsDEM import *
 
 
-if __name__ == '__main__':
+def main():
+    '''Main function to read a LVIS file and plot a waveform at a given index'''
+
+    # Define command line parser to read a LVIS file and a waveform at a given index   
+    parser = argparse.ArgumentParser(description = 'Read LVIS File and Plot Waveform')
+    parser.add_argument('lvis_file', type = str, help = 'Path to the LVIS file')
+    parser.add_argument('--waveform_index', type = int, default = 100, help = 'Index of waveform in subset of file to plot')
+    args = parser.parse_args()
+
     start = time.process_time()
 
-    # Initialise class
-    lvis_file = '/geos/netdata/oosa/assignment/lvis/2009/ILVIS1B_AQ2009_1020_R1408_049700.h5'
-    LVIS = plotLVIS(lvis_file, onlyBounds = True)
-    
+    # Initialize LVIS class
+    LVIS = plotLVIS(args.lvis_file, onlyBounds = True)
+
     # Subset LVIS data
-    x0 = LVIS.bounds[0]
-    y0 = LVIS.bounds[1]
-    x1 = x0 + 0.1
-    y1 = y0 + 0.1
+    x0, y0 = LVIS.bounds[0], LVIS.bounds[1]
+    x1, y1 = x0 + 0.5, y0 + 0.5
 
     # Read subset LVIS data
-    LVIS_subset = plotLVIS(lvis_file, minX = x0, minY = y0, maxX = x1, maxY = y1)
+    LVIS_subset = plotLVIS(args.lvis_file, minX = x0, minY = y0, maxX = x1, maxY = y1)
     LVIS_subset.reproject_coords(3031)
     LVIS_subset.set_elevations()
 
-    # Save subset coordinates to visualise
+    # Save subset coordinates to visualize
     df = pd.DataFrame({'x': LVIS_subset.x, 'y': LVIS_subset.y})
     df.to_csv('/home/s1949330/Documents/MSc_OOSA/project_data/task1_subset.csv', index = False)
     print(df.head())
-    
+
     # Plot one waveform from subset
-    waveform = LVIS_subset.one_waveform(100)
-    LVIS_subset.plot_wave(waveform[1], waveform[0], outName = 'waveform.png')
-    print('Waveform:', LVIS_subset.x[0], LVIS_subset.y[0], '(EPSG:3031)')
+    waveform = LVIS_subset.one_waveform(ind = args.waveform_index)
+    LVIS_subset.plot_wave(waveform[1], waveform[0], outName = f'{args.lvis_file}_waveform.png')
+    print(f'Waveform at index {args.waveform_index}: {LVIS_subset.x[0]}, {LVIS_subset.y[0]} (EPSG:3031)')
+
+    # Print the number of waveforms in the subset
+    num_waveforms = len(LVIS_subset.x)
+    print(f'Number of waveforms in the subset: {num_waveforms}')
 
     # Calculate CPU runtime and RAM usage
     print(f"CPU runtime: {round((time.process_time() - start), 2)} seconds")
     ram = psutil.Process().memory_info().rss
     print(f"RAM usage: {convert_bytes(ram)}")
+
+
+if __name__ == '__main__':
+
+    main()
+
+    # python task1.py '/geos/netdata/oosa/assignment/lvis/2009/... .h5' --waveform_index 150

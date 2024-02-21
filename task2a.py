@@ -13,8 +13,8 @@ def main():
     '''Main function to batch process LVIS and produce flight-path DEMs for a given year'''
     
     # Define command line parser to use for multiple LVIS years
-    parser = argparse.ArgumentParser(description = "Process LVIS files from a specified directory.")
-    parser.add_argument("year", help = "Year of LVIS data (e.g., 2009 or 2015)")
+    parser = argparse.ArgumentParser(description = "Process LVIS files from a specified year.")
+    parser.add_argument("year", help = "Year of LVIS data (2009 or 2015)")
     args = parser.parse_args()
     
     start = time.process_time()
@@ -56,12 +56,13 @@ def main():
         print(f'-----------------LVIS FILE DEM COMPLETE-----------------\n')
 
     # Calculate CPU runtime and RAM usage
-    print(f"CPU runtime: {round(((time.process_time() - start) * 60), 3)} minutes")
+    print(f"CPU runtime: {round(((time.process_time() - start) / 60), 2)} minutes")
     ram = psutil.Process().memory_info().rss
     print(f"RAM usage: {convert_bytes(ram)}")
 
 
-if __name__ == '__main__':   
+if __name__ == '__main__':
+
     main()
 
     # python task2a.py 2009 

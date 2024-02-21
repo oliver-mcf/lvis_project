@@ -58,7 +58,7 @@ class readLVIS():
       return
     # save the subset of all data
     self.nWaves = len(useInd)
-    print("Number of waves in the subset:", self.nWaves)
+    print("Number of waves in subset:", self.nWaves)
     self.lon = tempLon[useInd]
     self.lat = tempLat[useInd]
     # load sliced arrays, to save RAM
