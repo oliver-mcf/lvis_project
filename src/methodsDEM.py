@@ -14,6 +14,8 @@ from rasterio.enums import Resampling
 from rasterio.plot import show
 from rasterio.features import geometry_mask
 from rasterio.windows import from_bounds, Window
+from rasterio.warp import reproject, Resampling
+from rasterio.vrt import WarpedVRT
 import rasterio as rio
 from scipy.interpolate import griddata
 from readLVIS import *
@@ -65,17 +67,17 @@ def filter_tiffs(geotiff_list, shapefile):
 ###########################################
 
 
-def merge_tiffs(filtered_list, output_dir, step_size):
+def merge_tiffs(filtered_list, output_dir, step_size, label):
     '''Batch process to merge DEM subsets'''
     # systematically iterate through subsets
     merged_count = 0
     for i in range(0, len(filtered_list), step_size):
         select_list = filtered_list[i:i + step_size]
         # build virtual dataset of current subsets
-        vrt_filename = os.path.join(output_dir, f'merged_subsets{i}.vrt')
+        vrt_filename = os.path.join(output_dir, f'{label}_merged_subsets{i}.vrt')
         vrt = gdal.BuildVRT(vrt_filename, select_list)
         # translate the virtual dataset to a tiff
-        output_filename = os.path.join(output_dir, f'merged_subsets{i}.tif')
+        output_filename = os.path.join(output_dir, f'{label}_merged_subsets{i}.tif')
         gdal.Translate(output_filename, vrt, xRes = 30, yRes = -30)
         # close virtual dataset
         vrt = None
@@ -84,7 +86,7 @@ def merge_tiffs(filtered_list, output_dir, step_size):
 
 
 ###########################################
-
+"""""""""
 def clip_tiff(input_file, shapefile, output_file):
     '''Clip DEM geotiff to study area'''
     # read input raster and shapefile
@@ -104,14 +106,71 @@ def clip_tiff(input_file, shapefile, output_file):
     dem.close()
     print(f'------------SUCCESSFUL LVIS DEM OF PINE ISLAND GLACIER------------:\n {output_file}')
 
+"""""""""
+def clip_tiff(input_file, shapefile, output_file, reference_raster=None):
+    '''Clip DEM geotiff to study area'''
+
+    # read input raster and shapefile
+    glacier = gpd.read_file(shapefile)
+    dem = rio.open(input_file)
+
+    # align raster and shape geometry
+    glacier = glacier.to_crs(dem.crs)
+    geometry = glacier.geometry.values[0]
+    geoms = [geometry]
+
+    # Use reference raster dimensions for cropping if provided
+    if reference_raster:
+        reference = rio.open(reference_raster)
+        vrt_options = {
+            'resampling': Resampling.nearest,
+            'src_crs': dem.crs,
+            'src_transform': dem.transform,
+            'crs': reference.crs,  # Change dst_crs to crs
+            'transform': reference.transform,  # Change dst_transform to transform
+            'width': reference.width,
+            'height': reference.height
+        }
+        vrt = WarpedVRT(dem, **vrt_options)
+        dem = rio.MemoryFile().open(driver='GTiff', count=1, width=reference.width,
+                                    height=reference.height, transform=reference.transform,
+                                    dtype=vrt.read(1).dtype)
+        dem.write(vrt.read(1), 1)
+
+    # clip dem to shapefile
+    dem_glacier, transform = rio.mask.mask(dataset=dem, shapes=geoms, crop=True)
+    
+    # Update metadata with EPSG 3031 and no-data value
+    metadata = dem.meta.copy()
+    metadata.update({'driver': 'GTiff',
+                     'crs': 'EPSG:3031',  # Set to EPSG 3031
+                     'height': dem_glacier.shape[1],
+                     'width': dem_glacier.shape[2],
+                     'transform': transform,
+                     'nodata': -999})  # Set no-data value
+
+    # write the clipped DEM as geotiff
+    with rio.open(output_file, 'w', **metadata) as dst:
+        dst.write(dem_glacier)
+
+    dem.close()
+    print(f'------------SUCCESSFUL CLIPPING OF RASTER------------:\n {output_file}')
+
+
+
+
+
+
+
+
 ###########################################
-'''''''''
+
 def smooth_tiff(input_file, output_file, window_size):
     # read input raster data
     with rio.open(input_file) as src:
         data = src.read(1)
         # identify coords of nodata values
-        nodata_mask = (data == src.nodata) | (data < 0)
+        nodata_mask = (data == src.nodata) | (data < 20)
         y, x = np.where(~nodata_mask)
         values = data[~nodata_mask]
         # create grid for interpolation
@@ -119,25 +178,6 @@ def smooth_tiff(input_file, output_file, window_size):
         # interpolate nodata values
         filled_data = griddata((y, x), values, (y_grid, x_grid), method = 'linear')
         # create geotiff with filled data
-        with rio.open(output_file, 'w', **src.profile) as dst:
-            dst.write(filled_data, 1)
-'''''''''
-
-def smooth_tiff(input_file, output_file):
-    with rio.open(input_file) as src:
-        data = src.read(1)
-        nodata_value = src.nodata
-
-        # Identify coords of nodata values, including values less than 0
-        nodata_mask = (data == nodata_value) | (data < 0)
-
-        # Fill nodata values using GDAL's FillNodata
-        filled_data = gdal.FillNodata(data, None, maxSearchDist=100, smoothingIterations=0)
-
-        # Mask filled data using the original nodata_mask
-        filled_data[nodata_mask] = nodata_value
-
-        # Save the filled data to the output GeoTIFF
         with rio.open(output_file, 'w', **src.profile) as dst:
             dst.write(filled_data, 1)
 
