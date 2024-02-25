@@ -10,6 +10,7 @@ from pprint import pprint
 import pandas as pd
 import time
 import psutil
+import os
 
 
 # Define class

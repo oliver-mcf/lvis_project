@@ -1,6 +1,9 @@
 '''
-Task2a: Batch Process LVIS, Produce DEMs
+Task2: Produce DEM for Single LVIS Flight
+Task3: Produce DEM for all LVIS Flights in 2009 and 2015
 '''
+
+###########################################
 
 # Import objects and methods
 from readLVIS import *
@@ -8,15 +11,21 @@ from processLVIS import *
 from plotLVIS import *
 from methodsDEM import *
 
+###########################################
 
+# Main function
 def main():
     '''Main function to batch process LVIS and produce flight-path DEMs for a given year'''
     
     # Define command line parser to use for multiple LVIS years
     parser = argparse.ArgumentParser(description = "Process LVIS files from a specified year.")
-    parser.add_argument("year", help = "Year of LVIS data (2009 or 2015)")
+    parser.add_argument("year", help = "Year of LVIS data, 2009 or 2015")
+    parser.add_argument("--single_file", action = "store_true", help = "Process only one LVIS file to DEM")
+    parser.add_argument("--res", type = int, default = 30, help = "Spatial resolution of DEM in meters")
+    parser.add_argument("--output_dir", help = "Output directory for DEM(s)")
     args = parser.parse_args()
     
+    # Start CPU runtime
     start = time.process_time()
 
     # Identify directory containing LVIS files
@@ -50,9 +59,13 @@ def main():
 
                 # Convert footprints to DEM
                 LVIS_subset.reproject_coords(3031)
-                outName = f'/home/s1949330/Documents/MSc_OOSA/project_data/{args.year}/DEM_subset.x.{x0}.y.{y0}.tif'
-                LVIS_subset.write_tiff(LVIS_subset.zG, LVIS_subset.x, LVIS_subset.y, 30, filename = outName, epsg = 3031)
-        
+                outName = f'{args.output_dir}/DEM_subset_{args.year}.x.{x0}.y.{y0}.tif'
+                LVIS_subset.write_tiff(LVIS_subset.zG, LVIS_subset.x, LVIS_subset.y, res = args.res, filename = outName, epsg = 3031)
+
+                # Produce DEM for one LVIS file if condition is applied
+                if args.single_file:
+                    break
+
         print(f'-----------------LVIS FILE DEM COMPLETE-----------------\n')
 
     # Calculate CPU runtime and RAM usage
@@ -60,10 +73,7 @@ def main():
     ram = psutil.Process().memory_info().rss
     print(f"RAM usage: {convert_bytes(ram)}")
 
-
+###########################################
+    
 if __name__ == '__main__':
-
     main()
-
-    # python task2a.py 2009 
-    #                  2015

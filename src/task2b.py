@@ -1,5 +1,5 @@
 '''
-Task2b: Produce DEM of Pine Island Glacier, 2009
+Task2b: Produce DEMs for Pine Island Glacier in 2009 and 2015
 '''
 
 # Import objects and methods
@@ -25,7 +25,7 @@ def main():
 
     # Filter subsets within range of study area (to merge all 244 subsets at once, RAM = ~9GB)
     glacier = '/home/s1949330/Documents/MSc_OOSA/project_data/pine_island/pine_island_glacier.shp'
-    filtered_subsets = filter_subsets(dem_list, glacier)
+    filtered_subsets = filter_geotiffs(dem_list, glacier)
 
     # Merge filtered subsets in appropriate batches
     merged_output_dir = f'/home/s1949330/Documents/MSc_OOSA/project_data/{args.year}/filtered/'

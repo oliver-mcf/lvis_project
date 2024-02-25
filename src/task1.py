@@ -2,13 +2,17 @@
 Task1: Read LVIS file, Plot Waveform
 '''
 
+###########################################
+
 # Import objects and methods
 from readLVIS import *
 from processLVIS import *
 from plotLVIS import *
 from methodsDEM import *
 
+###########################################
 
+# Main function
 def main():
     '''Main function to read a LVIS file and plot a waveform at a given index'''
 
@@ -34,13 +38,13 @@ def main():
 
     # Save subset coordinates to visualize
     df = pd.DataFrame({'x': LVIS_subset.x, 'y': LVIS_subset.y})
-    df.to_csv('/home/s1949330/Documents/MSc_OOSA/project_data/task1_subset.csv', index = False)
+    df.to_csv('task1_subset.csv', index = False)
     print(df.head())
 
     # Plot one waveform from subset
     waveform = LVIS_subset.one_waveform(ind = args.waveform_index)
-    LVIS_subset.plot_wave(waveform[1], waveform[0], outName = f'{args.lvis_file}_waveform.png')
-    print(f'Waveform at index {args.waveform_index}: {LVIS_subset.x[0]}, {LVIS_subset.y[0]} (EPSG:3031)')
+    LVIS_subset.plot_wave(waveform[1], waveform[0], outName = f'waveform_{args.lvis_file}.png')
+    print(f'Waveform at index {args.waveform_index}: {LVIS_subset.x[args.waveform_index]}, {LVIS_subset.y[args.waveform_index]} (EPSG:3031)')
 
     # Print the number of waveforms in the subset
     num_waveforms = len(LVIS_subset.x)
