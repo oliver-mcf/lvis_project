@@ -1,5 +1,5 @@
 '''
-Task5: Produce Smoothed DEMs for Pine Island Glacier in 2009 and 2015
+Task5: Produce Map of Elevation Change for Pine Island Glacier, 2009-2015
 '''
 
 ###########################################
@@ -15,7 +15,7 @@ from handleTiffs import *
 
 # Main function
 def main():
-    '''Main function to produce and smooth LVIS DEMs for Pine Island Glacier in a given year'''
+    '''Main function to produce an elevation chage map of Pine Island Glacier from 2009 to 2015'''
 
     # Start CPU runtime
     start = time.process_time()
