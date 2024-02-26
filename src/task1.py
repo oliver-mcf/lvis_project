@@ -8,7 +8,7 @@ Task1: Read LVIS file, Plot Waveform
 from readLVIS import *
 from processLVIS import *
 from plotLVIS import *
-from methodsDEM import *
+from manageRAM import *
 
 ###########################################
 

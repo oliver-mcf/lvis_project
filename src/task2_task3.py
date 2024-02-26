@@ -10,6 +10,7 @@ from readLVIS import *
 from processLVIS import *
 from plotLVIS import *
 from methodsDEM import *
+from manageRAM import *
 
 ###########################################
 
