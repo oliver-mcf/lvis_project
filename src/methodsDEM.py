@@ -107,65 +107,50 @@ def clip_tiff(input_file, shapefile, output_file):
     print(f'------------SUCCESSFUL LVIS DEM OF PINE ISLAND GLACIER------------:\n {output_file}')
 
 """""""""
-def clip_tiff(input_file, shapefile, output_file, reference_raster=None):
+def clip_tiff(input_file, shapefile, output_file, reference_raster = None):
     '''Clip DEM geotiff to study area'''
-
     # read input raster and shapefile
     glacier = gpd.read_file(shapefile)
     dem = rio.open(input_file)
-
     # align raster and shape geometry
     glacier = glacier.to_crs(dem.crs)
     geometry = glacier.geometry.values[0]
     geoms = [geometry]
-
-    # Use reference raster dimensions for cropping if provided
+    # use reference raster dimensions for cropping if provided
     if reference_raster:
         reference = rio.open(reference_raster)
         vrt_options = {
             'resampling': Resampling.nearest,
             'src_crs': dem.crs,
             'src_transform': dem.transform,
-            'crs': reference.crs,  # Change dst_crs to crs
-            'transform': reference.transform,  # Change dst_transform to transform
+            'crs': reference.crs,
+            'transform': reference.transform,
             'width': reference.width,
-            'height': reference.height
-        }
+            'height': reference.height}
         vrt = WarpedVRT(dem, **vrt_options)
-        dem = rio.MemoryFile().open(driver='GTiff', count=1, width=reference.width,
-                                    height=reference.height, transform=reference.transform,
-                                    dtype=vrt.read(1).dtype)
+        dem = rio.MemoryFile().open(driver = 'GTiff', count = 1, width=reference.width, height = reference.height, 
+                                    transform = reference.transform, dtype = vrt.read(1).dtype)
         dem.write(vrt.read(1), 1)
-
     # clip dem to shapefile
-    dem_glacier, transform = rio.mask.mask(dataset=dem, shapes=geoms, crop=True)
-    
-    # Update metadata with EPSG 3031 and no-data value
+    dem_glacier, transform = rio.mask.mask(dataset = dem, shapes = geoms, crop = True)
+    # update metadata with epsg and no-data value
     metadata = dem.meta.copy()
     metadata.update({'driver': 'GTiff',
-                     'crs': 'EPSG:3031',  # Set to EPSG 3031
+                     'crs': 'EPSG:3031',
                      'height': dem_glacier.shape[1],
                      'width': dem_glacier.shape[2],
                      'transform': transform,
-                     'nodata': -999})  # Set no-data value
-
+                     'nodata': -999})
     # write the clipped DEM as geotiff
     with rio.open(output_file, 'w', **metadata) as dst:
         dst.write(dem_glacier)
-
     dem.close()
-    print(f'------------SUCCESSFUL CLIPPING OF RASTER------------:\n {output_file}')
-
-
-
-
-
-
-
+    print(f'------------SUCCESSFUL LVIS DEM OF PINE ISLAND GLACIER------------:\n {output_file}')
 
 ###########################################
 
 def smooth_tiff(input_file, output_file, window_size):
+    '''Gap fill no data values in geotiff'''
     # read input raster data
     with rio.open(input_file) as src:
         data = src.read(1)
@@ -176,6 +161,7 @@ def smooth_tiff(input_file, output_file, window_size):
         # create grid for interpolation
         y_grid, x_grid = np.mgrid[0:data.shape[0]:window_size, 0:data.shape[1]:window_size]
         # interpolate nodata values
+        print('Smoothing geotiff...')
         filled_data = griddata((y, x), values, (y_grid, x_grid), method = 'linear')
         # create geotiff with filled data
         with rio.open(output_file, 'w', **src.profile) as dst:

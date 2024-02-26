@@ -25,11 +25,11 @@ def main():
 
     # Start CPU runtime
     start = time.process_time()
-    
+
     # Filter DEM subsets to those in study area
     dem_list = glob.glob(f'DEM_subset_{args.year}.*.tif')
     print(f'Number of DEM subsets: {len(dem_list)}')
-    shape = 'pine_island_glacier.shp'
+    shape = '.../shapes/pine_island_glacier.shp'
     filtered_subsets = filter_tiffs(dem_list, shape)
 
     # Batch merge filtered subsets (to merge all 244 subsets at once, RAM = ~9GB)
@@ -42,10 +42,10 @@ def main():
     lvis_dem = f'LVIS_DEM_{args.year}_RAW.tif'
     output_file = os.path.join(args.output_dir, f'LVIS_DEM_{args.year}_CROP.tif')
     clip_tiff(lvis_dem, shape, output_file)
-    
+
     # Perform smoothing algorithm if condition is applied
     if args.smooth:
-        raw_dem = f'LVIS_DEM_{args.year}_CROP.tif'
+        raw_dem = f'LVIS_DEM_{args.year}.tif'
         smooth_dem = str(args.output_dir) + f'LVIS_DEM_{args.year}_SMOOTH.tif' 
         smooth_tiff(raw_dem, smooth_dem, window_size = 1)
 
