@@ -160,15 +160,18 @@ The class is initialised as follows:
 
 The class holds the following methods:
     
-    read_tiff():           This
-    calculate_change():    This
-    write_tiff():          This
+    read_tiff():           Reads a geotiff and its data as a 2-D numpy array.
+    calculate_change():    Calculates change between data of two geotiff raster files.
+    write_tiff():          Writes a geotiff raster from a 2-D numpy array.
 
 The main purpose of this class is to calculate the difference between the data of two geotiff files and produce a new geotiff of the change values.
     
     DEM.data
-    elevation_change, mean_elevation_change = DEM.calculate_change(other_tiff, avg = False)
+    change, mean = DEM.calculate_change(other_tiff, avg = False)
     DEM.write_tiff(data, output_filename, epsg)
+
+
+
 
 ## Usage Instructions
 
