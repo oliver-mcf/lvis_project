@@ -15,8 +15,15 @@ The main purpose of this project was to develop a library of python code to proc
 NASA's Land, Vegetation, and Ice Sensor [(LVIS)](https://lvis.gsfc.nasa.gov/Home/index.html) is an airborne LiDAR instrument which retrieves data on surface topography and 3-D structure. This project was designed to deal with LVIS data acquired during NASA's [Operation IceBridge](https://icebridge.gsfc.nasa.gov/), which monitored key glaciers at the poles during the gap in ICESat (2003-09) and ICESat-2 (2018-) missions. The LVIS data is available on the [NASA Earth Data Portal](https://search.earthdata.nasa.gov/search?q=LVIS) or via the [LVIS webpage](https://lvis.gsfc.nasa.gov/Data/GE.html?status=submitted).
 
 ## Code Structure
+
+### Scripts
+- [readLVIS.py](#readLVIS.py): *Base-class to read LVIS files and store data*.
+- [processLVIS.py](#processLVIS.py): *Sub-class to process LVIS data and estimate ground*.
+- [plotLVIS.py](#plotLVIS.py): *Sub-class to visualise LVIS data*.
+- [methodsDEM.py](#methodsDEM.py): *Class and independent methods to handle DEM geotiff files*.
+
 ### readLVIS.py
-File contains a class to read a store LVIS data from a HDF5 file format. The class holds methods to retrieve all or a spatial subset of LVIS data from a file. The default coordinate reference system encoding for all LVIS data is WGS84 / EPSG:4326.  
+File contains a class to read and store LVIS data from a HDF5 file format. The class holds methods to retrieve all or a spatial subset of LVIS data from a file. The default coordinate reference system encoding for all LVIS data is WGS84 / EPSG:4326.  
 
 *Class:* **readLVIS**  
 The data is stored as the variables:
@@ -31,7 +38,7 @@ The data is stored as the variables:
     lfid:    LVIS flight ID integer.
     shotN:   LVIS shot number for this flight.
 
-The data is read as: 
+The class is initialised as follows: 
 
     from readLVIS import readLVIS
     LVIS = readLVIS(filename)
@@ -68,7 +75,7 @@ The additional variables:
     stdevNoise:   Standard deviation of waveform noise.
     denoised:     Smoothed, denoised waveform.
 
-The data is processed as: 
+The class is initialised as follows: 
 
     from processLVIS import processLVIS
     LVIS = processLVIS(filename)
@@ -85,7 +92,41 @@ The main purpose of this class is to give the attribute of ground estimate to ea
     
     LVIS.zG
 
+### plotLVIS.py
+File contains a class to visualise LVIS data, inheriting from the class **processLVIS** in *processLVIS.py*. The class initialiser is not overwritten and expects a LVIS file.  
 
+*Class:* **plotLVIS**  
+The additional variables:
+    
+    inProj:               Value threshold outwidth is considered noise.
+    outProj:              Centre of gravity signal, calibrated specifically for ice.
+    x, y:                 Range resolution.
+    bounds:               Number of bins as an integer.
+    plot:                 Mean waveform noise.
+    minX, minY:           Bottom left coordinate of file bounds.
+    maxX, maxY:           Top right coordinate of file bounds.
+    nX, nY:               Number of horizontal and vertical pixels.
+    xInds, yInds:         Indices of horizontal and vertical pixels.
+    pixel_footprints:     Number of waveform returns intersecting with a given pixel.
+    pixel_mean:           Average waveform return of those intersecting with a given pixel.
+    imageArr:             Ground estimates from footprints intersecting with each pixel stored in a 2-D numpy array.
+
+The class is initialised as follows: 
+
+    from plotLVIS import plotLVIS
+    LVIS = plotLVIS(filename)
+
+The class holds the following methods:
+    
+    reproject_coords():    Returns ground estimate from waveform.
+    reproject_bounds():    Reprojects the coordinate reference system encoded in file bounds from longitude/latitude to an anticipated x, y with metre units. 
+    plot_wave():           Creates a figure illustrating one waveform return as a function of intensity and elevation.
+    write_tiff():          Writes 2-D numpy array of average footprint ground estimates per pixel.
+
+The main purpose of this class is to illustrate one waveform return and produce a geotiff raster of ground estimates:
+    
+    LVIS.plot
+    LVIS.imageArr
 
 ## Usage Instructions
 
