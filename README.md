@@ -53,7 +53,37 @@ The focal purpose of this class is to give the attribute of elevations to each w
     
     LVIS.z
 
+  
+### processLVIS.py
+File contains a class to process LVIS data, inheriting from the class `readLVIS` in *readLVIS.py*. The class initialiser is not overwritten and expects a LVIS file.  
 
+*Class:* **processLVIS**  
+The additional variables:
+    
+    threshold:    Value threshold outwidth is considered noise.
+    zG:           Centre of gravity signal, calibrated specifically for ice.
+    res:          Range resolution.
+    noiseBins:    Number of bins as an integer.
+    meanNoise:    Mean waveform noise.
+    stdevNoise:   Standard deviation of waveform noise.
+    denoised:     Smoothed, denoised waveform.
+
+The data is processed as: 
+
+    from processLVIS import processLVIS
+    LVIS = processLVIS(filename)
+
+The class holds the following methods:
+    
+    estimate_ground():    Returns ground estimate from waveform.
+    set_threshold():      Sets waveform noise threshold.
+    centre_gravity():     Finds centre of gravity of denoised waveforms.
+    find_stats():         Calculates standard deviation and mean of noise.
+    denoise():            Removes noise in waveform data.
+
+The focal purpose of this class is to give the attribute of ground estimate to each waveform:
+    
+    LVIS.zG
 
 
 
