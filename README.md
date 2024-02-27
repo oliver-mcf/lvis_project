@@ -128,6 +128,35 @@ The main purpose of this class is to illustrate one waveform return and produce 
     LVIS.plot
     LVIS.imageArr
 
+### methodsDEM.py
+File contains an independent class and other methods to handle and manipulate DEM geotiff raster files. The class initialiser expects a geotiff file.  
+
+*Class:* **methodsDEM**  
+The additional variables:
+    
+    ds:                Geotiff as a dataset object.
+    nX, nY:            Number of horizontal and vertical pixels.
+    transform_ds:      Stored geolocation information.
+    xOrigin, yOrigin:  Coordinates of raster x and y corners.
+    pixelWidth:        Spatial resoution in horizontal direction.
+    pixelHeight:       Spatial resolution in vertical direction.
+    data:              Geotiff data in a 2-D numpy array.
+
+The class is initialised as follows: 
+
+    from methodsDEM import methodsDEM
+    DEM = methodsDEM(filename)
+
+The class holds the following methods:
+    
+    read_tiff():           This
+    calculate_change():    This
+    write_tiff():          This
+
+The main purpose of this class is to calculate the difference between the data of two geotiff files and produce a new geotiff of the change values.
+    
+    write code here
+
 ## Usage Instructions
 
 
