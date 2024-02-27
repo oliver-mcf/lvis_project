@@ -55,7 +55,7 @@ The focal purpose of this class is to give the attribute of elevations to each w
 
   
 ### processLVIS.py
-File contains a class to process LVIS data, inheriting from the class `readLVIS` in *readLVIS.py*. The class initialiser is not overwritten and expects a LVIS file.  
+File contains a class to process LVIS data, inheriting from the class **readLVIS** in *readLVIS.py*. The class initialiser is not overwritten and expects a LVIS file.  
 
 *Class:* **processLVIS**  
 The additional variables:
