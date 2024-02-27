@@ -49,7 +49,7 @@ The class holds the following methods:
     dump_coords():     Returns all coordinates of data as two numpy arrays.
     dump_bounds():     Returns the bottom left and top right coordinates of data in file.
 
-The focal purpose of this class is to give the attribute of elevations to each waveform:
+The main purpose of this class is to give the attribute of elevations to each waveform:
     
     LVIS.z
 
@@ -81,7 +81,7 @@ The class holds the following methods:
     find_stats():         Calculates standard deviation and mean of noise.
     denoise():            Removes noise in waveform data.
 
-The focal purpose of this class is to give the attribute of ground estimate to each waveform:
+The main purpose of this class is to give the attribute of ground estimate to each waveform:
     
     LVIS.zG
 
