@@ -3,10 +3,21 @@
 The main purpose of this project was to develop a library of python code to process NASA's LVIS LiDAR data to examine ice mass change of Pine Island Glacier from acquisition flights in 2009 and 2015.  
 
 ## Contents
-- [Data](#Data) >>> lvis, shapes
-- [Code Structure](#Code-Structure) >>> directory, class/functions, main files
-- [Usage Instructions](#Usage-Instructions) >>> imported libraries, tasks1-5 command line
-- [Outputs](#Outputs) >>> tasks1-5
+- [Data](#Data)
+- [Code Structure](#Code-Structure):
+    - [readLVIS.py](#readLVIS.py) - *Base-class to read LVIS files and store data*
+    - [processLVIS.py](#processLVIS.py) - *Sub-class to process LVIS data and estimate ground*
+    - [plotLVIS.py](#plotLVIS.py) - *Sub-class to visualise LVIS data*
+    - [methodsDEM.py](#methodsDEM.py) - *Class and methods to handle DEM geotiff files*
+    - [manageRAM.py](#manageRAM.py) - *Methods to calculate CPU and RAM usage*
+- [Usage Instructions](#Usage-Instructions):
+    - [Packages](#Packages)
+    - [Task 1](#Task-1) - *Read LVIS file and plot arbitrary waveform*
+    - [Task 2](#Task-2) - *Produce DEM for single LVIS flight path*
+    - [Task 3](#Task-3) - *Produce DEMs for all LVIS flights in 2009 and 2015*
+    - [Task 4](#Task-4) - *Produce smooth DEMs for Pine Island Glacier in 2009 and 2015*
+    - [Task 5](#Task-5) - *Calculate elevation and ice mass change for Pine Island Glacier, 2009-2015*
+- [Outputs](#Outputs)
 
 ## Data
 **PIG:**  In this study, the spatial extent of Pine Island Glacier (PIG) was defined as the marine-terminating subset of that defined by the GLIMS Glacier Database. The study area was manually assigned informed by both the GLIMS shapefile and LVIS flight paths in both 2009 and 2015. The shapefile used in this project is accessible in `shapes/pine_island_glacier.shp` alongside its supplementary files.   
@@ -155,7 +166,9 @@ The class holds the following methods:
 
 The main purpose of this class is to calculate the difference between the data of two geotiff files and produce a new geotiff of the change values.
     
-    write code here
+    DEM.data
+    elevation_change, mean_elevation_change = DEM.calculate_change(other_tiff, avg = False)
+    DEM.write_tiff(data, output_filename, epsg)
 
 ## Usage Instructions
 
