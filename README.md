@@ -25,6 +25,7 @@ NASA's Land, Vegetation, and Ice Sensor [(LVIS)](https://lvis.gsfc.nasa.gov/Home
 - [processLVIS.py](#processLVIS.py): *Sub-class to process LVIS data and estimate ground*.
 - [plotLVIS.py](#plotLVIS.py): *Sub-class to visualise LVIS data*.
 - [methodsDEM.py](#methodsDEM.py): *Class and independent methods to handle DEM geotiff files*.
+- [manageRAM.py](#manageRAM.py): *Methods to calculate CPU runtime and RAM usage*
 
 ### readLVIS.py
 File contains a class to read and store LVIS data from a HDF5 file format. The class holds methods to retrieve all or a spatial subset of LVIS data from a file. The default coordinate reference system encoding for all LVIS data is WGS84 / EPSG:4326.  
