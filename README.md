@@ -164,13 +164,22 @@ The class holds the following methods:
     calculate_change():    Calculates change between data of two geotiff raster files.
     write_tiff():          Writes a geotiff raster from a 2-D numpy array.
 
-The main purpose of this class is to calculate the difference between the data of two geotiff files and produce a new geotiff of the change values.
+The main purpose of this class is to calculate the difference between the data of two geotiff files and produce a new geotiff of the change values.  
+
+The file contains additional methods for this purpose:
     
-    DEM.data
-    change, mean = DEM.calculate_change(other_tiff, avg = False)
-    DEM.write_tiff(data, output_filename, epsg)
+    filter_tiffs():    Returns a list of geotiffs in range of study area.
+    merge_tiffs():     Systematically merges geotiffs together in batches until all merged.
+    clip_tiff():       Crops the spatial extent of a geotiff to an input shapefile or reference raster.
+    smooth_tiff():     Performs a gap filling algorithm to smooth over the no data values in a geotiff.
 
+### manageRAM.py
+File contains methods to calculate the computing efficiency and cost of running a given python script.  
 
+The methods for this purpose are:
+    
+    convert_bytes():    Converts bytes to appropriate bytes units.
+    file_size():        Calculates the size of a given file, and returns appropriate bytes units.
 
 
 ## Usage Instructions
