@@ -345,8 +345,8 @@ This file requires the following computing power:
 - LVIS elevation change at 30 metre spatial resolution, in geotiff format.
 - Surface area of Pine Island Glacier.
 - Ice volume change.
-- Ice mass of water equivalent change.
-- Ice mass of water equivalent change per year.
+- Ice mass of water equivalent change: **-22,030 kg**
+- Ice mass of water equivalent change per year: **-3,672 kg/year**
 
 <img src="outputs/lvis_dem_change.png" width="380"> <img src="outputs/lvis_dem_change_histogram.png" width="380"> 
   
