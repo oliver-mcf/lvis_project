@@ -187,18 +187,4 @@ def smooth_tiff(input_file, output_file, window_size):
 
 ###########################################
     
-def resample_geotiff(input_geotiff, output_geotiff, res):
-    # Open the input geotiff
-    ds = gdal.Open(input_geotiff)
 
-    # Set the target resolution
-    res = [res, -res]  # Assuming square pixels
-
-    # Define resampling options
-    options = gdal.WarpOptions(xRes=res[0], yRes=res[1], resampleAlg=gdal.GRA_Bilinear)
-
-    # Perform the resampling
-    gdal.Warp(output_geotiff, ds, options=options)
-
-    # Close the datasets
-    ds = None
