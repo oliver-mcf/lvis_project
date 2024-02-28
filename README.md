@@ -181,23 +181,15 @@ The methods for this purpose are:
 ### Packages  
 This project inherits the following main libraries, wherein specific functions are also called directly:
     
-    os
-    h5py
-    pyproj
-    osgeo
-    numpy
-    glob
-    pandas
-    geopandas
-    shapely
-    rasterio
-    scipy
-    matplotlib
-    pprint
-    tqdm
+    os                            shapely
+    h5py                          rasterio
+    pyproj                        scipy
+    osgeo                         matplotlib
+    numpy                         pprint
+    glob                          tqdm
+    pandas                        time
+    geopandas                     psutil
     argparse
-    time
-    psutil
     
 ### Task 1 | *Read an LVIS file and plot arbitrary waveform*
 *File*: **task1.py**
@@ -250,7 +242,7 @@ This file can be run for this task with the following command line arguments:
     
     python task2_task3.py 2009 --res 30 --output_dir /path/for/output/DEM_subsets.tif
 
-    or
+    and/or
 
     python task2_task3.py 2015 --res 30 --output_dir /path/for/output/DEM_subsets.tif
 
@@ -267,32 +259,31 @@ This file requires the following computing power:
 ### Task 4 | *Produce smoothed DEMs for Pine Island Glacier in 2009 and 2015*
 *File*: **task4.py**
 
-The main function called in this file produces and smooths LVIS DEMs for the study area in a given year. To perform the smoothing algorithm, the  
+The main function called in this file produces and smooths LVIS DEMs for the study area in a given year. The DEM subsets produced in Task 3 are filtered to those intersecting with the study area, the filtered subsets are then merged and then cropped to the specific dimensions of the study area. If specified in the command line, an additional smoothing algorithm is then performed for the flight path DEMs over the study area. The smoothed DEMs are then cropped for a final time to the specific dimensions of the study area to produce a final, gap-filled DEM for PIG in a given year.
 
 This file requires the following command line arguments:
     
-    'year':             Year of LVIS data, 2009 or 2015.
-    'single_file':      Boolean instruction to process only one LVIS file.
-    'res':              Output pixel size / spatial resolution of DEM in metres.
-    'output_dir':       Output path directory for DEM files to be written.
+    'year':           Year of LVIS data, 2009 or 2015.
+    'smooth':         Boolean instruction to perform smoothing algorithm on the flight path DEMs over the study area.
+    'output_dir':     Output path directory for DEM files to be written.
 
 This file can be run for this task with the following command line arguments:
     
-    python task2_task3.py 2009 --res 30 --output_dir /path/for/output/DEM_subsets.tif
+    python task4.py 2009 --smooth --output_dir /path/for/output/smooth_DEM.tif
 
-    or
+    and/or
 
-    python task2_task3.py 2015 --res 30 --output_dir /path/for/output/DEM_subsets.tif
+    python task4.py 2015 --smooth --output_dir /path/for/output/smooth_DEM.tif
 
 This file requires the following computing power:
     
-    # For all 2009 files
-    CPU runtime:   1.32 hours
-    RAM usage:     782 MB
+    # 2009
+    CPU runtime:   1.37 minutes
+    RAM usage:     2.7 GB
 
-    # For all 2015 files
-    CPU runtime:   6.05 hours
-    RAM usage:     1.1 GB
+    # 2015
+    CPU runtime:   1.85 minutes
+    RAM usage:     388 MB
 
 
 ## Outputs
