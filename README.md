@@ -331,9 +331,9 @@ This file requires the following computing power:
 - LVIS flight DEMs of Pine Island Glacier.
 - LVIS smooth DEMs of Pine Island Glacier.  
 
-<img src="outputs/lvis_dem_2009.png" width="450">    <img src="outputs/lvis_dem_2015.png" width="450">  
+<img src="outputs/lvis_dem_2009.png" width="380">    <img src="outputs/lvis_dem_2015.png" width="380">  
   
-<img src="outputs/lvis_dem_2009_final.png" width="450">    <img src="outputs/lvis_dem_2015_final.png" width="450">  
+<img src="outputs/lvis_dem_2009_final.png" width="380">    <img src="outputs/lvis_dem_2015_final.png" width="380">  
 
 
 
@@ -348,7 +348,7 @@ This file requires the following computing power:
 - Ice mass of water equivalent change per year.
 
 
-<img src="outputs/lvis_dem_change_histogram.png" width="450"> <img src="outputs/lvis_dem_change.png" width="450">  
+<img src="outputs/lvis_dem_change_histogram.png" width="380"> <img src="outputs/lvis_dem_change.png" width="380">  
 
 
 
