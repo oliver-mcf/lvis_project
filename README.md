@@ -5,11 +5,6 @@ The main purpose of this project was to develop a library of python code to proc
 ## Contents
 - [Data](#Data)
 - [Code Structure](#Code-Structure):
-    - [readLVIS.py](#readLVIS.py) - *Base-class to read LVIS files and store data*
-    - [processLVIS.py](#processLVIS.py) - *Sub-class to process LVIS data and estimate ground*
-    - [plotLVIS.py](#plotLVIS.py) - *Sub-class to visualise LVIS data*
-    - [methodsDEM.py](#methodsDEM.py) - *Class and methods to handle DEM geotiff files*
-    - [manageRAM.py](#manageRAM.py) - *Methods to calculate CPU and RAM usage*
 - [Usage Instructions](#Usage-Instructions):
     - [Packages](#Packages)
     - [Task 1](#Task-1) - *Read LVIS file and plot arbitrary waveform*
@@ -183,6 +178,31 @@ The methods for this purpose are:
 
 
 ## Usage Instructions
+### Packages  
+This project inherits the following main libraries, wherein specific functions are also called directly:
+    
+    os
+    h5py
+    pyproj
+    osgeo
+    numpy
+    glob
+    pandas
+    geopandas
+    shapely
+    rasterio
+    scipy
+    matplotlib
+    pprint
+    tqdm
+    argparse
+    time
+    psutil
+    
+
+
+
+
 
 
 ## Outputs
