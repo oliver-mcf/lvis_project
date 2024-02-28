@@ -199,10 +199,100 @@ This project inherits the following main libraries, wherein specific functions a
     time
     psutil
     
+### Task 1 | *Read an LVIS file and plot arbitrary waveform*
+*File*: **task1.py**
 
+The main function called in this file initialises the subclass `plotLVIS()` which inherits from the base class `readLVIS()`. Then a subset of the LVIS data is defined and then read directly, reprojected into WGS84 Antarctic Polar Stereographic / EPSG:3031 with units of metres, and elevations are read into arrays. The waveforms and the corresponding coordinates within the subset are then written to a .csv file to give spatial context for the return waveforms. One arbitrary waveform index, given in the command line is then visualised as a function of return intensity and elevation and saved as a .png file. Finally the total number of waveforms in the spatial subset is printed to the terminal to show any other indexed waveforms available for visualisation.  
 
+This file requires the following command line arguments:
+    
+    'lvis_file':        Directory path to an LVIS HDF5 file.
+    'waveform_index:    Indexed waveform in the file subset, for which a plot is generated - the default value is 100.
 
+This file can be run with the following command line argument:
+    
+    python task1.py /path/to/lvis/file.h5 --waveform_index 100
 
+This file requires the following computing power:
+    
+    CPU runtime:   1-3 seconds
+    RAM usage:     315-603 MB 
+
+### Task 2 | *Produce DEM for single LVIS flight path*
+*File*: **task2_task3.py**
+
+The main function called in this file fulfils both Task 2 and Task 3, depending on the command line arguments given. For Task 2, once the directory containing LVIS files is identified, one file is isolated, the subclass `plotLVIS()` is initialised, a spatial subset of LVIS data is defined, and for the first subset of a single file footprint ground estimates are calculated and converted to a geotiff raster, with the DEM being written in the spatial resolution and output path directory defined in the command line.  
+
+This file requires the following command line arguments:
+    
+    'year':             Year of LVIS data, 2009 or 2015.
+    'single_file':      Boolean instruction to process only one LVIS file.
+    'res':              Output pixel size / spatial resolution of DEM in metres.
+    'output_dir':       Output path directory for DEM files to be written.
+
+This file can be run for this task with the following command line argument:
+    
+    python task2_task3.py 2009 --single_file --res 30 --output_dir /path/for/output/DEM.tif
+
+### Task 3 | *Produce DEMs for all LVIS flights in 2009 and 2015*
+*File*: **task2_task3.py**
+
+The main function called in this file fulfils both Task 2 and Task 3, depending on the command line arguments given. For Task 3, once the directory containing LVIS files is identified, each file is systematically iterated over where the subclass `plotLVIS()` is initialised, a spatial subset of LVIS data is defined to limit RAM usage, and for each subset of a every file, footprint ground estimates are calculated and converted to a geotiff raster, with the DEM subsets being written in the spatial resolution and output path directory defined in the command line.  
+
+This file requires the following command line arguments:
+    
+    'year':             Year of LVIS data, 2009 or 2015.
+    'single_file':      Boolean instruction to process only one LVIS file.
+    'res':              Output pixel size / spatial resolution of DEM in metres.
+    'output_dir':       Output path directory for DEM files to be written.
+
+This file can be run for this task with the following command line arguments:
+    
+    python task2_task3.py 2009 --res 30 --output_dir /path/for/output/DEM_subsets.tif
+
+    or
+
+    python task2_task3.py 2015 --res 30 --output_dir /path/for/output/DEM_subsets.tif
+
+This file requires the following computing power:
+    
+    # For all 2009 files
+    CPU runtime:   1.32 hours
+    RAM usage:     782 MB
+
+    # For all 2015 files
+    CPU runtime:   6.05 hours
+    RAM usage:     1.1 GB
+
+### Task 4 | *Produce smoothed DEMs for Pine Island Glacier in 2009 and 2015*
+*File*: **task4.py**
+
+The main function called in this file produces and smooths LVIS DEMs for the study area in a given year. To perform the smoothing algorithm, the  
+
+This file requires the following command line arguments:
+    
+    'year':             Year of LVIS data, 2009 or 2015.
+    'single_file':      Boolean instruction to process only one LVIS file.
+    'res':              Output pixel size / spatial resolution of DEM in metres.
+    'output_dir':       Output path directory for DEM files to be written.
+
+This file can be run for this task with the following command line arguments:
+    
+    python task2_task3.py 2009 --res 30 --output_dir /path/for/output/DEM_subsets.tif
+
+    or
+
+    python task2_task3.py 2015 --res 30 --output_dir /path/for/output/DEM_subsets.tif
+
+This file requires the following computing power:
+    
+    # For all 2009 files
+    CPU runtime:   1.32 hours
+    RAM usage:     782 MB
+
+    # For all 2015 files
+    CPU runtime:   6.05 hours
+    RAM usage:     1.1 GB
 
 
 ## Outputs
