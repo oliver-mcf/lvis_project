@@ -4,14 +4,8 @@ The main purpose of this project was to develop a library of python code to proc
 
 ## Contents
 - [Data](#Data)
-- [Code Structure](#Code-Structure):
-- [Usage Instructions](#Usage-Instructions):
-    - [Packages](#Packages)
-    - [Task 1](#Task-1) - *Read LVIS file and plot arbitrary waveform*
-    - [Task 2](#Task-2) - *Produce DEM for single LVIS flight path*
-    - [Task 3](#Task-3) - *Produce DEMs for all LVIS flights in 2009 and 2015*
-    - [Task 4](#Task-4) - *Produce smooth DEMs for Pine Island Glacier in 2009 and 2015*
-    - [Task 5](#Task-5) - *Calculate elevation and ice mass change for Pine Island Glacier, 2009-2015*
+- [Code Structure](#Code-Structure)
+- [Usage Instructions](#Usage-Instructions)
 - [Outputs](#Outputs)
 
 ## Data
@@ -284,6 +278,28 @@ This file requires the following computing power:
     # 2015
     CPU runtime:   1.85 minutes
     RAM usage:     388 MB
+
+### Task 5 | *Calculate elevation and ice mass change for Pine Island Glacier, 2009-2015*
+*File*: **task5.py**
+
+The main function called in this file produces an elevation change map of PIG from DEMs in 2009 and 2015. This script is dependent on Task 3 and Task 4 running successfully. The smoothed PIG DEMs for 2009 and 2015 along with the study area shapefile are loaded and the DEMs are clipped to the study area dimensions. The change in elevation is then calculated from the newly clipped DEMs, where the mean elevation change across the study area is printed to the terminal and a histogram is plotted and saved. The elevation change data is then written to a geotiff raster. The change in ice volume is then calculated using the valid elevation change data and the surface area of the shapefile. Ice volume is printed to the terminal. The change is then converted from ice volume to mass of water equivalent using. Both the overall and the yearly ice mass change is printed to the terminal.
+
+This file requires the following command line arguments:
+    
+    'output_dir':     Output path directory for change files to be written.
+
+This file can be run for this task with the following command line arguments:
+    
+    python task5.py --output_dir /path/for/output/elevation_change.tif
+
+This file requires the following computing power:
+    
+    CPU runtime:   23.6 seconds
+    RAM usage:     931 MB
+
+
+
+
 
 
 ## Outputs
