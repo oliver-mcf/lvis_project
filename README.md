@@ -350,7 +350,7 @@ This file requires the following computing power:
 
 <img src="outputs/lvis_dem_change.png" width="380"> <img src="outputs/lvis_dem_change_histogram.png" width="380"> 
   
-- [Back to Start](#LVIS-Project)
+[Back to Start](#LVIS-Project)
 
 
 
