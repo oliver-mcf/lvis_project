@@ -9,10 +9,14 @@ The main purpose of this project was to develop a library of python code to proc
 - [Outputs](#Outputs)
 
 ## Data
-**PIG:**  In this study, the spatial extent of Pine Island Glacier (PIG) was defined as the marine-terminating subset of that defined by the GLIMS Glacier Database. The study area was manually assigned informed by both the GLIMS shapefile and LVIS flight paths in both 2009 and 2015. The shapefile used in this project is accessible in `shapes/pine_island_glacier.shp` alongside its supplementary files.   
-
 **LVIS**:  
-NASA's Land, Vegetation, and Ice Sensor [(LVIS)](https://lvis.gsfc.nasa.gov/Home/index.html) is an airborne LiDAR instrument which retrieves data on surface topography and 3-D structure. This project was designed to deal with LVIS data acquired during NASA's [Operation IceBridge](https://icebridge.gsfc.nasa.gov/), which monitored key glaciers at the poles during the gap in ICESat (2003-09) and ICESat-2 (2018-) missions. The LVIS data is available on the [NASA Earth Data Portal](https://search.earthdata.nasa.gov/search?q=LVIS) or via the [LVIS webpage](https://lvis.gsfc.nasa.gov/Data/GE.html?status=submitted).
+NASA's Land, Vegetation, and Ice Sensor [(LVIS)](https://lvis.gsfc.nasa.gov/Home/index.html) is an airborne LiDAR instrument which retrieves data on surface topography and 3-D structure. This project was designed to deal with LVIS data acquired during NASA's [Operation IceBridge](https://icebridge.gsfc.nasa.gov/), which monitored key glaciers at the poles during the gap in ICESat (2003-09) and ICESat-2 (2018-) missions. The LVIS data is available on the [NASA Earth Data Portal](https://search.earthdata.nasa.gov/search?q=LVIS) or via the [LVIS webpage](https://lvis.gsfc.nasa.gov/Data/GE.html?status=submitted).  
+
+**PIG:**  In this study, the spatial extent of Pine Island Glacier (PIG) was defined as the marine-terminating subset of that defined by the GLIMS Glacier Database. The study area was manually assigned informed by both the GLIMS shapefile and LVIS flight paths in both 2009 and 2015. The shapefile used in this project is accessible in `shapes/pine_island_glacier.shp` alongside its supplementary files.  
+
+<img src="outputs/glacier_geography.png" width="500">  
+<img src="outputs/glacier_study.png" width="500">  
+
 
 ## Code Structure
 
@@ -170,7 +174,7 @@ The methods for this purpose are:
     convert_bytes():    Converts bytes to appropriate bytes units.
     file_size():        Calculates the size of a given file, and returns appropriate bytes units.
 
-
+  
 ## Usage Instructions
 ### Packages  
 This project inherits the following main libraries, wherein specific functions are also called directly:
@@ -297,10 +301,57 @@ This file requires the following computing power:
     CPU runtime:   23.6 seconds
     RAM usage:     931 MB
 
-
-
-
-
-
+  
 ## Outputs
+#### Task 1 | Arbitrary LVIS Waveform
+- Waveform coordinates.
+- Number of waveforms in file subset.
+- Figure of waveform expressed as a function of return intensity and elevation.  
+
+<img src="outputs/waveform.png" width="500" align = "center"> 
+
+#### Task 2 | Single LVIS Flight Path DEM
+- Number of LVIS files per year.
+- Number of waves in subset.
+- Evidence of ground estimation.
+- Single LVIS flight path DEM at 30 metre spatial resolution, in geotiff format.
+
+#### Task 3 | All LVIS Flight Path DEMs
+- Number of LVIS files per year.
+- Number of waves in subset.
+- Evidence of ground estimation.
+- LVIS flight path DEM subsets at 30 m spatial resolution, in geotiff format.
+    - Subsets in 2009: 245 (ranging from 403 bytes to 7.3 MB)
+    - Subsets in 2015: 1620 (ranging from 403 bytes to 51 MB)
+
+#### Task 4 | LVIS DEMs of Pine Island Glacier
+- Number of DEM subsets.
+- Evidence of merged DEM subsets.
+- Evidence of clipped (merged) DEM.
+- LVIS flight DEMs of Pine Island Glacier.
+- LVIS smooth DEMs of Pine Island Glacier.  
+
+<img src="outputs/lvis_dem_2009.png" width="450">    <img src="outputs/lvis_dem_2015.png" width="450">  
+  
+<img src="outputs/lvis_dem_2009_final.png" width="450">    <img src="outputs/lvis_dem_2015_final.png" width="450">  
+
+
+
+#### Task 5 | Elevation and Mass Change of Pine Island Glacier
+- Evidence of DEM overlap.
+- Average elevation change.
+- Histogram of elevation change.
+- LVIS elevation change at 30 metre spatial resolution, in geotiff format.
+- Surface area of Pine Island Glacier.
+- Ice volume change.
+- Ice mass of water equivalent change.
+- Ice mass of water equivalent change per year.
+
+
+<img src="outputs/lvis_dem_change_histogram.png" width="450"> <img src="outputs/lvis_dem_change.png" width="450">  
+
+
+
+
+
 
