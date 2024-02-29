@@ -46,7 +46,7 @@ class plotLVIS(processLVIS):
     ''''Plot a single waveform'''
     plot = outName
     plt.plot(x, y)
-    plt.xlabel("Waveform return")
+    plt.xlabel("Return Intensity")
     plt.ylabel("Elevation (m)")
     plt.savefig(plot)
     plt.close()
