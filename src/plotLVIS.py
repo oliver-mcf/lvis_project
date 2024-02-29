@@ -78,10 +78,9 @@ class plotLVIS(processLVIS):
               if len(pixel_footprints) > 0:
                   pixel_mean = np.mean(pixel_footprints)
                   imageArr[i, j] = pixel_mean
-        # set geolocation information (note GeoTIFFs count down from top edge in Y)
+      # set geolocation information (note GeoTIFFs count down from top edge in Y)
       transform = from_origin(minX, maxY, res, res)
-
-        # Write data to GeoTIFF using rasterio
+      # write data to GeoTIFF using rasterio
       with rio.open(filename, 'w', driver = 'GTiff', height = nY, width = nX, count = 1, dtype = imageArr.dtype, crs = f'EPSG:{epsg}', transform = transform, nodata = -999) as dst:
             dst.write(imageArr, 1)
       print("Success:", filename)
