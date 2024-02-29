@@ -68,6 +68,8 @@ class methodsDEM():
       # generate statistics
       mean_elevation_change = np.mean(elevation_change[elevation_change != -999])
       return mean_elevation_change, elevation_change
+    else:
+      return elevation_change
   
   ###########################################
 
