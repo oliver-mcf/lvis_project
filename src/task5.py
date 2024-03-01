@@ -63,15 +63,16 @@ def main():
     # Calculate valid elevation change (excluding -999 values)
     valid_change = elevation_change[elevation_change != -999]
 
-    # Calculate volume change in meters (average over the area)
-    volume_change = np.sum(valid_change) / surface_area
+    # Calculate volume change in meters
+    volume_change = np.sum(valid_change) * surface_area
     print(f'Ice Volume Change: {round(volume_change, 3)} m³')
 
-    # Convert ice volume to mass of water equivalent change (with conversion from g/cm³ to kg/m³)
-    ice_density = 0.917 / 1000  # >>> (Rumble & Lide, 2020)
-    mwe_change = (np.sum(valid_change) * ice_density)
-    print(f'Ice Mass Change: {round(mwe_change, 3)} kg')
-    print(f'Ice Mass Change per year: {round((mwe_change / 6), 3)} kg/year')
+    # Convert ice volume change to mass of water equivalent
+    ice_density = 0.917 / 1000                       # convert density from g/cm³ to kg/m³
+    water_density = 1.000 / 1000                     # convert density from g/cm³ to kg/m³
+    mass_change = volume_change * (ice_density / water_density)
+    print(f'Ice Mass Change: {round(mass_change, 3)} kg')
+    print(f'Ice Mass Change per year: {round((mass_change / 6), 3)} kg/year')
 
     # Calculate CPU runtime and RAM usage
     print(f"CPU runtime: {round((time.process_time() - start), 2)} seconds")
