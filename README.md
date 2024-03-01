@@ -345,10 +345,10 @@ This file requires the following computing power:
 - Average elevation change: **-2.31 m**
 - Histogram of elevation change.
 - LVIS elevation change at 30 metre spatial resolution, in geotiff format.
-- Surface area of Pine Island Glacier study area: **319.21 sq km**
+- Surface area of Pine Island Glacier study area: **9,576.35 sq km**
 - Ice volume change: **-21.62 cubic km**
-- Ice mass change: **19,827.15 tonnes**
-- Ice mass change per year: **-3,305.53 tonnes** or **-2.46%**
+- Ice mass change: **19,827.15 tonnes** or **-2.46**
+- Ice mass change per year: **-3,304.52 tonnes** or **-0.41%**
 
 <img src="outputs/lvis_dem_change.png" width="380"> <img src="outputs/lvis_dem_change_histogram.png" width="380"> 
   
