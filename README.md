@@ -342,13 +342,13 @@ This file requires the following computing power:
 
 #### Task 5 | Elevation and Mass Change of Pine Island Glacier
 - Evidence of DEM overlap.
-- Average elevation change.
+- Average elevation change: **-2.31 m**
 - Histogram of elevation change.
 - LVIS elevation change at 30 metre spatial resolution, in geotiff format.
-- Surface area of Pine Island Glacier.
-- Ice volume change.
-- Ice mass of water equivalent change: **-22,030 kg**
-- Ice mass of water equivalent change per year: **-3,672 kg/year**
+- Surface area of Pine Island Glacier study area: **319.21 sq km**
+- Ice volume change: **-21.62 cubic km**
+- Ice mass change: **19,827.15 tonnes**
+- Ice mass change per year: **-3,305.53 tonnes** or **-2.46%**
 
 <img src="outputs/lvis_dem_change.png" width="380"> <img src="outputs/lvis_dem_change_histogram.png" width="380"> 
   
